@@ -2,8 +2,8 @@ name: Reddit Hype Tracker
 
 on:
   schedule:
-    - cron: "0 * * * *"   # jede volle Stunde
-  workflow_dispatch:       # manuell startbar
+    - cron: "0 * * * *"    # jede volle Stunde UTC
+  workflow_dispatch:        # manuell startbar
 
 permissions:
   contents: write
@@ -13,9 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - name: Install dependencies
         run: pip install praw textblob pandas requests
-      - name: Run tracker
+      - name: Run script
         env:
           CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
@@ -23,6 +25,7 @@ jobs:
           BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python reddit_hype_tracker.py
+
       - name: Commit updated CSV
         run: |
           git config user.email "action@github.com"
