@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  run:
+  test_schedule:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
