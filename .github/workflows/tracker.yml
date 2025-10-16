@@ -2,14 +2,14 @@ name: Reddit Hype Tracker
 
 on:
   schedule:
-    - cron: "0 * * * *"    # jede volle Stunde UTC
+    - cron: "5 * * * *"    # jede volle Stunde UTC
   workflow_dispatch:        # manuell startbar
 
 permissions:
   contents: write
 
 jobs:
-  test_schedule:
+  run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
