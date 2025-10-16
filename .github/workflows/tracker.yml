@@ -3,7 +3,7 @@ name: Reddit Hype Tracker
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*10 * * * *'  # alle 10 Minuten zum Testen
+    - cron: '*/30 * * * *'  # alle 10 Minuten zum Testen
 
 permissions:
   contents: write
