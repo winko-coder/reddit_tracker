@@ -20,8 +20,8 @@ reddit = praw.Reddit(
 )
 
 # === Telegram-Konfiguration ===
-BOT_TOKEN = "8373278064:AAHNvQRzo7t_jvakcUFxn-_UcHlQxpfUw5c"
-CHAT_ID = 8226887753
+BOT_TOKEN = TELEGRAM_BOT_TOKEN
+CHAT_ID = TELEGRAM_CHAT_ID
 bot = Bot(token=BOT_TOKEN)
 
 # === Parameter ===
