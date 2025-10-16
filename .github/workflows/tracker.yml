@@ -2,8 +2,7 @@ name: Reddit Hype Tracker
 
 on:
   schedule:
-    - cron: "5 * * * *"    # jede volle Stunde UTC
-  workflow_dispatch:        # manuell startbar
+    - cron: "18 * * * *"    # jede volle Stunde UTC
 
 permissions:
   contents: write
