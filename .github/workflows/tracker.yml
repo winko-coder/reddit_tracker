@@ -16,7 +16,7 @@ jobs:
         with:
           persist-credentials: true
       - name: Install dependencies
-        run: pip install praw textblob pandas requests yfinance
+        run: pip install praw textblob pandas yfinance matplotlib requests
       - name: Run script
         env:
           CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
