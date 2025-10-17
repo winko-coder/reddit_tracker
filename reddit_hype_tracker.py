@@ -120,7 +120,7 @@ print("📨 Telegram-Update gesendet!")
 try:
     df_all["Timestamp"] = pd.to_datetime(df_all["Timestamp"])
     df_all = df_all.sort_values("Timestamp")
-    top_tickers = df_new["Ticker"].head(3).tolist()
+    top_tickers = df_new["Ticker"].head(5).tolist()
 
     plt.figure(figsize=(12, 7))
     colors = ["#0072B2", "#E69F00", "#009E73"]
