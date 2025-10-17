@@ -103,7 +103,7 @@ print(f"✅ CSV aktualisiert ({len(df_new)} neue Einträge).")
 
 # === Telegram-Zusammenfassung ===
 top_message = "<b>📊 Aktuelle Reddit-Trends</b>\n\n"
-for _, row in df_new.head(5).iterrows():
+for _, row in df_new.head(TOP_N).iterrows():
     line = f"• <b>{row['Ticker']}</b>: {row['Mentions']} Erwähnungen, Sentiment {row['Sentiment']:+.2f}, Kurs {row['CurrentPrice']}\n"
     top_message += line
 
