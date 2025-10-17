@@ -6,6 +6,9 @@ from datetime import datetime
 from collections import Counter
 import os
 import requests
+import matplotlib.pyplot as plt
+import io
+import numpy as np
 
 # === Reddit API Setup ===
 reddit = praw.Reddit(
@@ -41,6 +44,16 @@ def send_telegram_message(text):
             requests.post(url, json=payload, timeout=10)
         except Exception as e:
             print(f"⚠️ Telegram-Fehler: {e}")
+
+def send_telegram_photo(image_bytes, caption=""):
+    """Sendet ein Bild über Telegram."""
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
+    files = {"photo": ("combined_chart.png", image_bytes)}
+    data = {"chat_id": CHAT_ID, "caption": caption}
+    try:
+        requests.post(url, data=data, files=files, timeout=15)
+    except Exception as e:
+        print(f"⚠️ Telegram-Foto-Fehler: {e}")
 
 # === Datensammlung von Reddit ===
 all_tickers = []
@@ -98,3 +111,52 @@ top_message += f"\n⏰ {datetime.now().strftime('%Y-%m-%d %H:%M')}"
 send_telegram_message(top_message)
 
 print("📨 Telegram-Update gesendet!")
+
+try:
+    df_all["Timestamp"] = pd.to_datetime(df_all["Timestamp"])
+    df_all = df_all.sort_values("Timestamp")
+    top_tickers = df_new["Ticker"].head(3).tolist()
+
+    plt.figure(figsize=(12, 7))
+    colors = ["#0072B2", "#E69F00", "#009E73"]
+
+    for i, t in enumerate(top_tickers):
+        subset = df_all[df_all["Ticker"] == t].tail(20)
+        if subset.empty:
+            continue
+
+        # Kombinierte „Hype-Stärke“ (Erwähnungen * Sentiment)
+        subset["HypeStrength"] = subset["Mentions"] * subset["Sentiment"]
+
+        # Linke y-Achse: Kurs
+        ax1 = plt.gca()
+        ax1.plot(subset["Timestamp"], subset["CurrentPrice"], color=colors[i], label=f"{t} Kurs", linewidth=2)
+        ax1.set_ylabel("💰 Kurs (USD)")
+        ax1.tick_params(axis="y")
+
+        # Rechte y-Achse: Hype-Stärke
+        ax2 = ax1.twinx()
+        ax2.plot(subset["Timestamp"], subset["HypeStrength"], color=colors[i], linestyle="--", alpha=0.6, label=f"{t} Hype")
+        ax2.set_ylabel("🔥 Hype-Stärke (Mentions × Sentiment)")
+
+    plt.title("📈 Reddit-Hype & Kursentwicklung der Top-Ticker")
+    ax1.set_xlabel("Datum")
+    ax1.grid(True, linestyle="--", alpha=0.4)
+
+    # Gemeinsame Legende aus beiden Achsen
+    lines_1, labels_1 = ax1.get_legend_handles_labels()
+    lines_2, labels_2 = ax2.get_legend_handles_labels()
+    plt.legend(lines_1 + lines_2, labels_1 + labels_2, loc="upper left")
+
+    plt.tight_layout()
+
+    # Bild an Telegram senden
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png")
+    buf.seek(0)
+    send_telegram_photo(buf, caption="📊 Kurs & Reddit-Hype (Erwähnungen × Sentiment)")
+    plt.close()
+    print("✅ Kombiniertes Chart gesendet!")
+
+except Exception as e:
+    print(f"⚠️ Fehler bei kombiniertem Chart: {e}")
