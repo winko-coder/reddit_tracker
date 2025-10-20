@@ -104,13 +104,13 @@ print(f"✅ CSV aktualisiert ({len(df_new)} neue Einträge).")
 # === Telegram-Zusammenfassung ===
 top_message = "<b>📊 Aktuelle Reddit-Trends</b>\n\n"
 top_message_2 = "\n<b>Aktuell interessante Sentiments</b>:\n"
-send_tm2 = false;
+send_tm2 = False;
 for _, row in df_new.head(TOP_N).iterrows():
     line = f"• <b>{row['Ticker']}</b>: {row['Mentions']} Erwähnungen, Sentiment {row['Sentiment']:+.2f}, Kurs {row['CurrentPrice']}\n"
     if(row['Sentiment'] > 0.1 or row['Sentiment'] < -0.1):
         line2 = f"• <b>{row['Ticker']}</b>: {row['Mentions']} Erwähnungen, Sentiment {row['Sentiment']:+.2f}, Kurs {row['CurrentPrice']}\n"
         top_message_2 += line2
-        send_tm2 = true;
+        send_tm2 = True;
     top_message += line
 
 top_message += f"\n⏰ {datetime.now().strftime('%Y-%m-%d %H:%M')}"
