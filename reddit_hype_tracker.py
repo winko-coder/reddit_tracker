@@ -114,7 +114,7 @@ for _, row in df_new.head(TOP_N).iterrows():
     top_message += line
 
 top_message += f"\n⏰ {datetime.now().strftime('%Y-%m-%d %H:%M')}"
-#send_telegram_message(top_message)
+send_telegram_message(top_message)
 if(send_tm2):
     send_telegram_message(top_message_2)
 
