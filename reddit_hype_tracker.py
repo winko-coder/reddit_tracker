@@ -107,7 +107,7 @@ top_message_2 = "\n<b>Aktuell interessante Sentiments</b>:\n"
 send_tm2 = False;
 for _, row in df_new.head(TOP_N).iterrows():
     line = f"• <b>{row['Ticker']}</b>: {row['Mentions']} Erwähnungen, Sentiment {row['Sentiment']:+.2f}, Kurs {row['CurrentPrice']}\n"
-    if(row['Sentiment'] > 0.1 or row['Sentiment'] < -0.1):
+    if(row['Sentiment'] > 0.2 or row['Sentiment'] < -0.2):
         line2 = f"• <b>{row['Ticker']}</b>: {row['Mentions']} Erwähnungen, Sentiment {row['Sentiment']:+.2f}, Kurs {row['CurrentPrice']}\n"
         top_message_2 += line2
         send_tm2 = True;
