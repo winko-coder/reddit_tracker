@@ -60,7 +60,7 @@ all_tickers = []
 ticker_sentiments = {}
 
 for sub in SUBREDDITS:
-    for post in reddit.subreddit(sub).hot(limit=LIMIT):
+    for post in reddit.subreddit(sub).new(limit=LIMIT):
         tickers = extract_tickers(post.title + " " + post.selftext)
         score = sentiment_score(post.title + " " + post.selftext)
         for t in tickers:
